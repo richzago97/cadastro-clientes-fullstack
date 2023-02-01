@@ -25,4 +25,4 @@ const listContactController = async (
   return res.json(contact);
 };
 
-export { createContactController };
+export { createContactController, listContactController };
