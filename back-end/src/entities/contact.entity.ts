@@ -10,21 +10,21 @@ import { Client } from "./client.entity";
 @Entity("contacts")
 export class Contact {
   @PrimaryGeneratedColumn("uuid")
-  readonly id?: string;
+  readonly id: string;
 
   @Column({ length: 60 })
-  name?: string;
+  name: string;
 
   @Column({ length: 60, unique: true })
-  email?: string;
+  email: string;
 
-  @Column()
-  telephone?: string;
+  @Column({ length: 14 })
+  telephone: string;
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt: Date;
 
   @ManyToOne(() => Client, (client) => client.contact)
   @JoinColumn()
-  client?: Client;
+  client: Client;
 }
