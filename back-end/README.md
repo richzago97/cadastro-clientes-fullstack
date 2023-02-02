@@ -19,9 +19,12 @@ If you don't have yarn installed, use the command below to install it globally o
 npm install --global yarn
 ````
 
-2.You must configure the .env
+2.You must configure the .env. Use the command, causes an .env file to be created based on .env.example.
+````
+cp .env.example .env
+````
 
-3. Run the command to migrate
+3.Run the command to migrate
 ````
 yarn typeorm migration:run -d src/data-source.ts
 ````
