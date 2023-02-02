@@ -2,7 +2,7 @@ import { instanceToPlain } from "class-transformer";
 import { Request, Response } from "express";
 import { Contact } from "../../entities/contact.entity";
 import createContactService from "../../services/contacts/createContact.service";
-import deleteContactService from "../../services/contacts/deleteClient.service";
+import deleteContactService from "../../services/contacts/deleteContact.service";
 import listContactService from "../../services/contacts/listContact.service";
 import updateContactService from "../../services/contacts/updateContact.service";
 
