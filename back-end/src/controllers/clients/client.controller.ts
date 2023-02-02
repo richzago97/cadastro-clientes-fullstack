@@ -39,12 +39,7 @@ const updateClientController = async (
   const dataUser = req.body;
   const updatedClient = await updateClientService(dataUser, id);
 
-  return res.json(
-    instanceToPlain({
-      message: "Data updated successfully!",
-      client: updatedClient,
-    })
-  );
+  return res.status(200).json({ message: "Update successful" });
 };
 
 const relatoryClientsController = async (req: Request, res: Response) => {
