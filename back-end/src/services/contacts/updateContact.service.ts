@@ -1,5 +1,4 @@
 import { AppDataSource } from "../../data-source";
-import { Client } from "../../entities/client.entity";
 import { Contact } from "../../entities/contact.entity";
 import { AppError } from "../../errors/appError";
 
@@ -8,9 +7,8 @@ const updateContactService = async (
   id: string
 ): Promise<Contact | undefined> => {
   const contactRepository = AppDataSource.getRepository(Contact);
-  const clientRepository = AppDataSource.getRepository(Client);
 
-  let contact = await contactRepository.findOne({
+  const contact = await contactRepository.findOne({
     where: {
       id,
     },
@@ -34,29 +32,11 @@ const updateContactService = async (
   await contactRepository.update(id, {
     ...dataContact,
   });
-  if (dataContact.client) {
-    const client = await clientRepository.findOne({
-      where: {
-        id: dataContact.client.id,
-      },
-    });
 
-    if (client && client.id) {
-      await clientRepository.update(client.id, { ...dataContact.client });
-    } else {
-      await clientRepository.save({ ...dataContact.client, client });
-    }
-    contact = await contactRepository.findOne({
-      where: {
-        id,
-      },
-    });
-
-    if (!contact) {
-      throw new AppError("Contact not found");
-    }
-
-    return contact;
+  if (!contact) {
+    throw new AppError("Contact not found");
   }
+
+  return contact;
 };
 export default updateContactService;
