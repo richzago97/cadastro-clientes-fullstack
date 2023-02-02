@@ -14,9 +14,17 @@ export interface IClient {
   updatedAt: string;
 }
 
+
 export interface IClientUpdate {
   name?: string;
   email?: string;
   password?: string;
   telephone?: string;
+}
+
+import { IContact } from "../../interfaces/contacts/contacts";
+
+export interface IClientWithContacts {
+  client: IClient;
+  contact: IContact[];
 }

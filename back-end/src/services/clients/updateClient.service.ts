@@ -3,7 +3,7 @@ import { Client } from "../../entities/client.entity";
 import { Contact } from "../../entities/contact.entity";
 import { AppError } from "../../errors/appError";
 
-const updateClienteService = async (
+const updateClientService = async (
   dataClient: Partial<Client>,
   id: string
 ) => {
@@ -40,7 +40,7 @@ const updateClienteService = async (
     });
 
     if (contact && contact.id) {
-      await contactRepository.update(contact.id, { ...dataClient.contact });
+      await contactRepository.update(contact.id, { ...dataClient.contact[0] });
     } else {
       await contactRepository.save({ ...dataClient.contact, client });
     }
@@ -52,4 +52,4 @@ const updateClienteService = async (
     return client;
   }
 };
-export default updateClienteService;
+export default updateClientService;

@@ -4,7 +4,9 @@ import { instanceToPlain } from "class-transformer";
 import createClientService from "../../services/clients/createClient.service";
 import listClientService from "../../services/clients/listClient.service";
 import deleteClientService from "../../services/clients/deleteClient.service";
-import updateClienteService from "../../services/clients/updateClient.service";
+import updateClientService from "../../services/clients/updateClient.service";
+import generateHTML from "../../utils/generateHTML";
+import convertToPDF from "../../utils/convertToPDF";
 
 const createClientController = async (
   req: Request,
@@ -35,7 +37,7 @@ const updateClientController = async (
 ): Promise<Response> => {
   const id: string = req.params.id;
   const dataUser = req.body;
-  const updatedClient = await updateClienteService(dataUser, id);
+  const updatedClient = await updateClientService(dataUser, id);
 
   return res.json(
     instanceToPlain({
@@ -45,9 +47,21 @@ const updateClientController = async (
   );
 };
 
+const relatoryClientsController = async (req: Request, res: Response) => {
+  const clients = await listClientService();
+  const clientsWithContacts: any = clients.map((client) => ({
+    client,
+    contacts: client.contact,
+  }));
+  const html = generateHTML(clientsWithContacts);
+
+  return convertToPDF(html, res);
+};
+
 export {
   createClientController,
   listClientController,
   deleteClientController,
   updateClientController,
+  relatoryClientsController,
 };
