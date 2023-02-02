@@ -1,14 +1,10 @@
 import { AppDataSource } from "../../data-source";
 import { Contact } from "../../entities/contact.entity";
 
-const listContactService = async () => {
+const deleteContactService = async (id: string): Promise<void> => {
   const contactRepository = AppDataSource.getRepository(Contact);
 
-  const contacts = contactRepository.find({
-    relations: { client: true },
-  });
-
-  return contacts;
+  await contactRepository.delete(id);
 };
 
-export default listContactService;
+export default deleteContactService;

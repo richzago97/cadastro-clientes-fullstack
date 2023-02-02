@@ -13,28 +13,28 @@ import { Contact } from "./contact.entity";
 @Entity("clients")
 export class Client {
   @PrimaryGeneratedColumn("uuid")
-  readonly id?: string;
+  readonly id: string;
 
   @Column({ length: 60 })
-  name?: string;
+  name: string;
 
   @Column()
-  telephone?: string;
+  telephone: string;
 
   @Column({ length: 60, unique: true })
-  email?: string;
+  email: string;
 
   @Column({ length: 150 })
   @Exclude()
-  password?: string;
+  password: string;
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   @OneToMany(() => Contact, (contact) => contact.client, { eager: true })
   @JoinColumn()
-  contact?: Contact[];
+  contact: Contact[];
 }

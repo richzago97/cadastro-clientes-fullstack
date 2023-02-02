@@ -10,7 +10,6 @@ declare global {
       contact: {
         id: string;
       };
-      validatedBody;
     }
   }
 }

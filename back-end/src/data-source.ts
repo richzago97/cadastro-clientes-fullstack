@@ -11,11 +11,11 @@ export const AppDataSource = new DataSource(
       }
     : {
         type: "postgres",
-        host: "localhost",
+        host: process.env.POSTGRES_HOST,
         port: 5432,
-        username: "rzago",
+        username: process.env.POSTGRES_USER,
         password: "123456",
-        database: "fullstack_form_1",
+        database: process.env.POSTGRES_DB_NAME,
         logging: true,
         synchronize: false,
         entities: ["src/entities/*.ts"],
