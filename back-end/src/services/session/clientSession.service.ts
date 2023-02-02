@@ -24,7 +24,7 @@ const clientLoginService = async ({
     throw new AppError("Wrong email/password", 403);
   }
 
-  const token = jwt.sign({ email: email }, String("shauhusajas"), {
+  const token = jwt.sign({ email: email }, process.env.SECRET_KEY as string, {
     expiresIn: "24h",
     subject: clients.id,
   });
