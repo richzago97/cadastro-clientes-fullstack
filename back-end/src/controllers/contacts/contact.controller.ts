@@ -42,7 +42,7 @@ const updateContactController = async (
   const dataContact = req.body;
   const updatedContact = await updateContactService(dataContact, id);
 
-  return res.send(instanceToPlain(updatedContact));
+  return res.status(200).json({ message: "Update successful" });
 };
 
 export {
