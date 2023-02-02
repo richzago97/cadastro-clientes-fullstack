@@ -1,23 +1,18 @@
 import { AppDataSource } from "../../data-source";
 import { Client } from "../../entities/client.entity";
-import { Contact } from "../../entities/contact.entity";
 import { AppError } from "../../errors/appError";
 
-const updateClientService = async (
-  dataClient: Partial<Client>,
-  id: string
-) => {
+const updateClientService = async (dataClient: Partial<Client>, id: string) => {
   const clientRepository = AppDataSource.getRepository(Client);
-  const contactRepository = AppDataSource.getRepository(Contact);
 
-  let client = await clientRepository.findOne({
+  const client = await clientRepository.findOne({
     where: {
       id,
     },
   });
 
   if (!client) {
-    throw new AppError("Client not found");
+    throw new AppError("Client not found", 404);
   }
 
   const dataKeys = Object.keys(dataClient);
@@ -32,24 +27,7 @@ const updateClientService = async (
   await clientRepository.update(id, {
     ...dataClient,
   });
-  if (dataClient.contact) {
-    const contact = await contactRepository.findOne({
-      where: {
-        client: { id: id },
-      },
-    });
 
-    if (contact && contact.id) {
-      await contactRepository.update(contact.id, { ...dataClient.contact[0] });
-    } else {
-      await contactRepository.save({ ...dataClient.contact, client });
-    }
-    client = await clientRepository.findOne({
-      where: {
-        id,
-      },
-    });
-    return client;
-  }
+  return client;
 };
 export default updateClientService;

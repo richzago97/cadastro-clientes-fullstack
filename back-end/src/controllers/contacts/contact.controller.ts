@@ -39,15 +39,10 @@ const updateContactController = async (
   res: Response
 ): Promise<Response> => {
   const id: string = req.params.id;
-  const dataUser = req.body;
-  const updatedContact = await updateContactService(dataUser, id);
+  const dataContact = req.body;
+  const updatedContact = await updateContactService(dataContact, id);
 
-  return res.json(
-    instanceToPlain({
-      message: "Data updated successfully!",
-      contact: updatedContact,
-    })
-  );
+  return res.send(instanceToPlain(updatedContact));
 };
 
 export {

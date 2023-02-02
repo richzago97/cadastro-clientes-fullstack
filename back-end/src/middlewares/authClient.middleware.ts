@@ -1,28 +1,30 @@
-import "dotenv/config";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 export const authClient = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    let token = req.headers.authorization?.split(" ")[1];
-
-    return jwt.verify(
-      token as string,
-      "shauhusajas" as string,
-      (error: any, decoded: any) => {
-        if (error) {
-          return res.status(401).json({
-            message: "Invalid token",
-          });
-        }
-        req.client = {
-          email: decoded.email,
-          id: decoded.sub,
-        };
-        return next();
-      }
-    );
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid Token" });
+  let token = req.headers.authorization;
+  if (!token) {
+    return res.status(404).json({
+      message: "Token not found",
+    });
   }
+
+  token = token.split(" ")[1];
+
+  jwt.verify(token, process.env.SECRET_KEY as string, (error, decoded: any) => {
+    if (error) {
+      return res.status(401).json({
+        message: "Invalid token",
+      });
+    }
+    if (decoded) {
+      req.client = {
+        email: decoded.email,
+        id: decoded.sub,
+      };
+    }
+
+    return next();
+  });
 };
