@@ -8,7 +8,9 @@ import clientSessionRouter from "./routes/session.routes";
 
 const app: Application = express();
 app.use(express.json());
+let cors = require("cors");
 
+app.use(cors());
 app.use("/login", clientSessionRouter);
 app.use("/clients", clientsRouter);
 app.use("/contacts", contactsRouter);
