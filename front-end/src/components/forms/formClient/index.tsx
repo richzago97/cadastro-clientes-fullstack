@@ -33,10 +33,9 @@ export const FormClientRegister = () => {
           {...register("password")}
         />
         <p>{errors.password?.message}</p>
-        
+
         <input type="text" placeholder="Phone" {...register("telephone")} />
         <p>{errors.telephone?.message}</p>
-
 
         <button className="btn" type="submit">
           Register
