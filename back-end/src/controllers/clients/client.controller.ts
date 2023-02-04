@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { Client } from "../../entities/client.entity";
 import { instanceToPlain } from "class-transformer";
 import createClientService from "../../services/clients/createClient.service";
-import listClientService from "../../services/clients/listClient.service";
+import listClientsRelatoryService from "../../services/clients/listClient.service";
 import deleteClientService from "../../services/clients/deleteClient.service";
 import updateClientService from "../../services/clients/updateClient.service";
 import generateHTML from "../../utils/generateHTML";
 import convertToPDF from "../../utils/convertToPDF";
+import listClientsService from "../../services/clients/listClient.service";
 
 const createClientController = async (
   req: Request,
@@ -17,8 +18,8 @@ const createClientController = async (
   return res.status(201).send(instanceToPlain(client));
 };
 
-const listClientController = async (req: Request, res: Response) => {
-  const clients = await listClientService();
+const listClientsController = async (req: Request, res: Response) => {
+  const clients = await listClientsService();
   return res.send(instanceToPlain(clients));
 };
 
@@ -26,9 +27,9 @@ const deleteClientController = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const id: string = req.params.id;
+  const id = req.client.id;
   const deletedClient: void = await deleteClientService(id);
-  return res.status(204).json(deletedClient);
+  return res.status(204).send();
 };
 
 const updateClientController = async (
@@ -43,7 +44,7 @@ const updateClientController = async (
 };
 
 const relatoryClientsController = async (req: Request, res: Response) => {
-  const clients = await listClientService();
+  const clients = await listClientsService();
   const clientsWithContacts: any = clients.map((client) => ({
     client,
     contacts: client.contact,
@@ -55,7 +56,7 @@ const relatoryClientsController = async (req: Request, res: Response) => {
 
 export {
   createClientController,
-  listClientController,
+  listClientsController,
   deleteClientController,
   updateClientController,
   relatoryClientsController,
