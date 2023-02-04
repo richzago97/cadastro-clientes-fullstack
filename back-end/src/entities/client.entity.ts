@@ -34,7 +34,10 @@ export class Client {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Contact, (contact) => contact.client, { eager: true })
+  @OneToMany(() => Contact, (contact) => contact.client, {
+    eager: true,
+    cascade: true,
+  })
   @JoinColumn()
   contact: Contact[];
 }
