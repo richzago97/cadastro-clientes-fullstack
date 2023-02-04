@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   createClientController,
   deleteClientController,
-  listClientController,
+  listClientsController,
   relatoryClientsController,
   updateClientController,
 } from "../controllers/clients/client.controller";
@@ -19,7 +19,7 @@ clientsRouter.post(
   validateSchema(createClientValidator),
   createClientController
 );
-clientsRouter.get("", authClient, listClientController);
+clientsRouter.get("", authClient, listClientsController);
 clientsRouter.get("/relatory", authClient, relatoryClientsController);
 clientsRouter.delete(
   "/:id",
