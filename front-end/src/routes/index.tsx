@@ -1,4 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
+import ClientDashboardPage from "../pages/clientDashboardPage";
+import ClientLoginPage from "../pages/clientLoginPage";
 import ClientRegistrationPage from "../pages/clientRegistrationPage";
 
 export const RoutesMain = () => {
@@ -6,7 +8,9 @@ export const RoutesMain = () => {
 
   return (
     <Routes location={location} key={location.pathname}>
-      <Route path="/" element={<ClientRegistrationPage />} />
+      <Route path="/clients" element={<ClientRegistrationPage />} />
+      <Route path="/login" element={<ClientLoginPage />} />
+      <Route path="/dashboard" element={<ClientDashboardPage />} />
     </Routes>
   );
 };
