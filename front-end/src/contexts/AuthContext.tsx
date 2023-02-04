@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode } from "react";
+import React, { createContext, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { toast } from "react-hot-toast";
@@ -14,14 +14,22 @@ export interface IDataRegister {
   telephone: string;
 }
 
+export interface IDataClientLogin {
+  email: string;
+  password: string;
+}
+
 interface IClientProps {
   children: ReactNode;
 }
 
 interface clientContextData {
   clientRegister: (IDataRegister: IDataRegister) => void;
+  clientLogin: (IDataClientLogin: IDataClientLogin) => void;
 }
 const AuthProvider = ({ children }: IClientProps) => {
+  const clientUser = localStorage.getItem("clientObject");
+  const [client, setClient] = useState(JSON.parse(clientUser!));
   const navigate = useNavigate();
 
   const clientRegister = (data: IDataRegister) => {
@@ -29,7 +37,7 @@ const AuthProvider = ({ children }: IClientProps) => {
     const postAPI = async () => {
       return api.post("/clients", data).then((response) => {
         console.log("response", response);
-        response.status === 201 && navigate("/");
+        response.status === 201 && navigate("/login");
         return response;
       });
     };
@@ -40,10 +48,25 @@ const AuthProvider = ({ children }: IClientProps) => {
     });
   };
 
+  const clientLogin = (data: IDataClientLogin) => {
+    console.log("Login", data);
+    api
+      .post("/login", data)
+      .then((response) => {
+        localStorage.setItem("@TOKEN", response.data.token);
+        setClient(response.data.token);
+        navigate("/dashboard");
+      })
+      .catch(() => {
+        toast.error("Login ou senha incorreta");
+      });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         clientRegister,
+        clientLogin,
       }}
     >
       {children}

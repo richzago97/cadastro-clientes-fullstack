@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, FormStyle } from "./style";
 import { AuthContext, IDataRegister } from "../../../contexts/AuthContext";
 import { useContext } from "react";
-import { schema } from "../../../validations/validationRegister";
 
 export const FormClientRegister = () => {
   const { clientRegister } = useContext(AuthContext);
@@ -22,14 +20,12 @@ export const FormClientRegister = () => {
   return (
     <Container>
       <FormStyle onSubmit={handleSubmit(onSubmitFunction)}>
+        <h2>Make your registration</h2>
         <input type="text" placeholder="Full Name" {...register("name")} />
         <p>{errors.name?.message}</p>
 
         <input type="text" placeholder="Email" {...register("email")} />
         <p>{errors.email?.message}</p>
-
-        <input type="text" placeholder="Phone" {...register("telephone")} />
-        <p>{errors.telephone?.message}</p>
 
         <input
           type="password"
@@ -37,6 +33,10 @@ export const FormClientRegister = () => {
           {...register("password")}
         />
         <p>{errors.password?.message}</p>
+        
+        <input type="text" placeholder="Phone" {...register("telephone")} />
+        <p>{errors.telephone?.message}</p>
+
 
         <button className="btn" type="submit">
           Register
