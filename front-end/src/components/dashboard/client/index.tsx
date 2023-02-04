@@ -1,49 +1,10 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Container, MainDiv } from "./style";
-import api from "../../../services/api";
-import { IClientsList } from "../../../interfaces/client";
-import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../../../contexts/AuthContext";
 
 export const DashboardClient = () => {
-  const [clients, setClients] = useState<IClientsList[]>([]);
-  const navigate = useNavigate();
-
-  const listClients = async () => {
-    try {
-      const token = localStorage.getItem("@TOKEN");
-      if (token) {
-        const response = await api.get("clients", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setClients(response.data);
-      } else {
-        navigate("/login");
-      }
-    } catch (error) {
-      localStorage.removeItem("@TOKEN");
-      console.error(error);
-    }
-  };
-  const deleteClient = async (id: string) => {
-    try {
-      const token = localStorage.getItem("@TOKEN");
-
-      if (token) {
-        const response = await api.delete(`/clients/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 204) {
-          setClients(clients.filter((client) => client.id !== id));
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { clients, listClients, deleteClient } = useContext(AuthContext);
 
   return (
     <Container>
@@ -57,7 +18,7 @@ export const DashboardClient = () => {
             <p>E-mail: {String(client.email)}</p>
             <p>Created at: {String(client.createdAt)}</p>
             <p>Updated At: {String(client.updatedAt)}</p>
-            {client.contact && (
+            {client.contact && client.contact.length ? (
               <>
                 <p>Contacts:</p>
                 <ul>
@@ -71,6 +32,8 @@ export const DashboardClient = () => {
                   ))}
                 </ul>
               </>
+            ) : (
+              <p>Contact: This client doesn't have any contacts</p>
             )}
             <button onClick={() => deleteClient(client.id)}>
               Delete Client
