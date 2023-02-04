@@ -1,7 +1,7 @@
 import { AppDataSource } from "../../data-source";
 import { Client } from "../../entities/client.entity";
 
-const listClientService = async(): Promise<Client[]> => {
+const listClientsService = async(): Promise<Client[]> => {
 
     const clientRepository = AppDataSource.getRepository(Client)
 
@@ -10,4 +10,4 @@ const listClientService = async(): Promise<Client[]> => {
     return clients;
 
 }
-export default listClientService;
+export default listClientsService;
