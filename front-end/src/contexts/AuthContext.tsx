@@ -21,6 +21,10 @@ export interface IDataClientLogin {
   password: string;
 }
 
+export interface IClientID {
+  id: string;
+}
+
 interface IClientProps {
   children: ReactNode;
 }
@@ -36,6 +40,8 @@ interface clientContextData {
   contacts: IContact[];
   client: IDataRegister;
   setClient: React.Dispatch<any>;
+  setClientID: React.Dispatch<any>;
+  clientID: IClientID | any;
   contactRegister: (IDataContactRegister: IContactRegister) => void;
   listContacts: (
     IDataContactRegister: IContactRegister | React.MouseEvent<HTMLButtonElement>
@@ -47,6 +53,7 @@ const AuthProvider = ({ children }: IClientProps) => {
   const [client, setClient] = useState(JSON.parse(clientUser!));
   const [clients, setClients] = useState<IClientsList[]>([]);
   const [contacts, setContacts] = useState<IContact[]>([]);
+  const [clientID, setClientID] = useState<IClientID | any>();
   const navigate = useNavigate();
 
   const clientRegister = async (data: IDataRegister) => {
@@ -54,12 +61,14 @@ const AuthProvider = ({ children }: IClientProps) => {
       const response = await api.post("/clients", data);
       if (response.status === 201) {
         navigate("/login");
-        toast.success("Conta criada com sucesso!");
+        toast.success("Account successfully created!");
+        setClientID(data.id);
+        console.log(data.id, clientID);
       } else {
-        toast.error("Cliente já cadastrado!");
+        toast.error("Account already registered!");
       }
     } catch (error) {
-      toast.error("Ocorreu um erro ao criar a conta");
+      toast.error("There was an error creating the account");
     }
   };
 
@@ -72,7 +81,7 @@ const AuthProvider = ({ children }: IClientProps) => {
         navigate("/dashboard");
       })
       .catch(() => {
-        toast.error("Login ou senha incorreta");
+        toast.error("Incorrect login or password");
       });
   };
 
@@ -107,6 +116,9 @@ const AuthProvider = ({ children }: IClientProps) => {
         });
         if (response.status === 204) {
           setClients(clients.filter((client) => client.id !== id));
+          toast.success("Client deleted with sucess!");
+        } else {
+          toast.error("Client not found");
         }
       }
     } catch (error) {
@@ -117,14 +129,18 @@ const AuthProvider = ({ children }: IClientProps) => {
   const contactRegister = async (data: IContactRegister) => {
     try {
       const token = localStorage.getItem("@TOKEN");
-      api
-        .post("/contacts", data, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(() => {});
+      const response = await api.post("/contacts", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 201) {
+        toast.success("Contact successfully created!");
+      } else {
+        toast.error("Contact already registered!");
+      }
     } catch (error) {
+      toast.error("There was an error creating the contact");
       console.error(error);
     }
   };
@@ -160,6 +176,9 @@ const AuthProvider = ({ children }: IClientProps) => {
         });
         if (response.status === 204) {
           setContacts(contacts.filter((client) => client.id !== id));
+          toast.success("Contact deleted with sucess!");
+        } else {
+          toast.error("Contact not found");
         }
       }
     } catch (error) {
@@ -181,6 +200,8 @@ const AuthProvider = ({ children }: IClientProps) => {
         listContacts,
         contacts,
         deleteContact,
+        setClientID,
+        clientID,
       }}
     >
       {children}

@@ -1,19 +1,20 @@
 import * as yup from "yup";
 
-export const schema = yup.object().shape({
+export const schemaClientRegister = yup.object().shape({
   name: yup
     .string()
-    .min(2, "Nome deve conter no mínimo 2 caracteres")
-    .required("Nome obrigatório"),
-  email: yup.string().email("Email inválido").required("Email obrigatório"),
-  telephone: yup.string(),
-  password: yup.string().required("Senha obrigatória"),
-  // .matches(
-  //   /(^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*_-])).{8,}$/,
-  //   "Deve conter 8 caraceteres, uma maiúscula, uma minúscula, um número e um caracter especial"
-  // ),
-  confirmPassword: yup
+    .min(4, "Name must contain at least 2 characters")
+    .required("Name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  telephone: yup.string().required(),
+  password: yup.string().required("Password is required"),
+});
+
+export const schemaContactRegister = yup.object().shape({
+  name: yup
     .string()
-    .required("Campo obrigatório")
-    .oneOf([yup.ref(`password`)], `As senhas devem ser as mesmas`),
+    .min(4, "Name must contain at least 2 characters")
+    .required("Name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  telephone: yup.string().required(),
 });
