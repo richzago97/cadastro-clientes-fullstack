@@ -69,4 +69,8 @@ export const FormStyle = styled.form`
     color: #0066cc;
     border: solid 2px #0066cc;
   }
+
+  .error {
+    color: red;
+  }
 `;
