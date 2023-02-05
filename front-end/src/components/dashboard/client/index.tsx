@@ -4,21 +4,20 @@ import ClientUpdateForm from "../../../components/forms/updateClient";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import { IClientDataUpdate, IClientsList } from "../../../interfaces/client";
+import { UpdateContext } from "../../../contexts/UpdateContext";
 
 export const DashboardClient = () => {
   const [showModal, setShowModal] = useState(false);
   const [isListClientsShowing, setIsListClientsShowing] = useState(false);
-  const [client, setClient] = useState<IClientDataUpdate | null>(null);
   const { clients, listClients, deleteClient } = useContext(AuthContext);
+  const { updateclientState } = useContext(UpdateContext);
 
   const handleEditClick = (client: IClientDataUpdate) => {
-    setClient(client);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setClient(null);
   };
 
   const toggleListClients = () => {
@@ -29,9 +28,9 @@ export const DashboardClient = () => {
   return (
     <Container>
       <MainDiv>
-        <h3>List Clients, Delete and Edit. Just click in Search Clients!</h3>
+        <h3>Your information, Delete and Edit. Just click in Client!</h3>
 
-        <button onClick={toggleListClients}>Search Clients</button>
+        <button onClick={toggleListClients}> Client</button>
         {isListClientsShowing &&
           clients.map((client) => (
             <li key={String(client.id)}>
@@ -89,7 +88,10 @@ export const DashboardClient = () => {
               transform: "translate(-50%, -50%)",
             }}
           >
-            <ClientUpdateForm client={client} onClose={handleCloseModal} />
+            <ClientUpdateForm
+              client={updateclientState}
+              onClose={handleCloseModal}
+            />
           </div>
         </div>
       )}

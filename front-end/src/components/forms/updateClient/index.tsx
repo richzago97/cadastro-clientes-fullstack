@@ -1,59 +1,64 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UpdateContext } from "../../../contexts/UpdateContext";
-import { IClientDataUpdate } from "../../../interfaces/client";
+import api from "../../../services/api";
+const UpdateClientForm: React.FC<any> = () => {
+  const { updateClient, updateclientState, setUpdateClientState } =
+    useContext(UpdateContext);
 
-interface IProps {
-  client: IClientDataUpdate | null;
-  onClose: () => void;
-}
-const ClientUpdateForm: React.FC<IProps> = () => {
-  const {
-    name,
-    setName,
-    email,
-    setEmail,
-    telephone,
-    setTelephone,
-    updateClient,
-  } = useContext(UpdateContext);
+  useEffect(() => {
+    const loadClient = async () => {
+      try {
+        const response = await api.get(`clients/${updateclientState.id}`);
+        console.log("Update useEffect, id", updateclientState.id);
+        setUpdateClientState(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadClient();
+  }, [setUpdateClientState, updateclientState.id]);
 
-  const onSubmitFunction = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    updateClient({ name, email, telephone });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdateClientState({
+      ...updateclientState,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  console.log("update client state", updateclientState);
+  console.log("name", updateclientState.name);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(updateclientState);
+    // updateClient( updateclientState);
   };
 
   return (
-    <form onSubmit={onSubmitFunction}>
-      <div>
-        <label htmlFor="name">Nome:</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="email">E-mail:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="telephone">Telefone:</label>
-        <input
-          type="tel"
-          id="telephone"
-          value={telephone}
-          onChange={(e) => setTelephone(e.target.value)}
-        />
-      </div>
-      <button type="submit">Atualizar</button>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        value={updateclientState.name}
+        onChange={handleChange}
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={updateclientState.email}
+        onChange={handleChange}
+      />
+      <input
+        type="tel"
+        name="telephone"
+        placeholder="Phone"
+        value={updateclientState.telephone}
+        onChange={handleChange}
+      />
+      <button type="submit">Submit</button>
     </form>
   );
 };
 
-export default ClientUpdateForm;
+export default UpdateClientForm;
