@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { toast } from "react-hot-toast";
-import { IClientsList } from "../interfaces/client";
+import { IClientsList, IContact, IContactRegister } from "../interfaces/client";
 
 export const AuthContext = createContext<clientContextData>(
   {} as clientContextData
@@ -13,6 +13,7 @@ export interface IDataRegister {
   email: string;
   password: string;
   telephone: string;
+  id?: string;
 }
 
 export interface IDataClientLogin {
@@ -32,29 +33,37 @@ interface clientContextData {
   ) => void;
   deleteClient: (id: string) => void;
   clients: IClientsList[];
+  contacts: IContact[];
+  client: IDataRegister;
+  setClient: React.Dispatch<any>;
+  contactRegister: (IDataContactRegister: IContactRegister) => void;
+  listContacts: (
+    IDataContactRegister: IContactRegister | React.MouseEvent<HTMLButtonElement>
+  ) => void;
+  deleteContact: (id: string) => void;
 }
 const AuthProvider = ({ children }: IClientProps) => {
   const clientUser = localStorage.getItem("clientObject");
   const [client, setClient] = useState(JSON.parse(clientUser!));
   const [clients, setClients] = useState<IClientsList[]>([]);
+  const [contacts, setContacts] = useState<IContact[]>([]);
   const navigate = useNavigate();
 
-  const clientRegister = (data: IDataRegister) => {
-    const postAPI = async () => {
-      return api.post("/clients", data).then((response) => {
-        response.status === 201 && navigate("/login");
-        return response;
-      });
-    };
-    return toast.promise(postAPI(), {
-      loading: "Loading",
-      success: "Conta criada com sucesso!",
-      error: "Cliente já cadastrado!",
-    });
+  const clientRegister = async (data: IDataRegister) => {
+    try {
+      const response = await api.post("/clients", data);
+      if (response.status === 201) {
+        navigate("/login");
+        toast.success("Conta criada com sucesso!");
+      } else {
+        toast.error("Cliente já cadastrado!");
+      }
+    } catch (error) {
+      toast.error("Ocorreu um erro ao criar a conta");
+    }
   };
 
   const clientLogin = (data: IDataClientLogin) => {
-    console.log("Login", data);
     api
       .post("/login", data)
       .then((response) => {
@@ -105,22 +114,56 @@ const AuthProvider = ({ children }: IClientProps) => {
     }
   };
 
-  const updateClient = async (id: string) => {
+  const contactRegister = async (data: IContactRegister) => {
     try {
       const token = localStorage.getItem("@TOKEN");
+      api
+        .post("/contacts", data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {});
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const listContacts = async () => {
+    try {
+      const token = localStorage.getItem("@TOKEN");
       if (token) {
-        const response = await api.patch(`/clients/${id}`, {
+        const response = await api.get("/contacts", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (response.status === 200) {
-          console.log(response);
+        setContacts(response.data);
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      localStorage.removeItem("@TOKEN");
+      console.error(error);
+    }
+  };
+
+  const deleteContact = async (id: string) => {
+    try {
+      const token = localStorage.getItem("@TOKEN");
+
+      if (token) {
+        const response = await api.delete(`/contacts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 204) {
+          setContacts(contacts.filter((client) => client.id !== id));
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -131,7 +174,13 @@ const AuthProvider = ({ children }: IClientProps) => {
         clientLogin,
         listClients,
         clients,
+        client,
+        setClient,
         deleteClient,
+        contactRegister,
+        listContacts,
+        contacts,
+        deleteContact,
       }}
     >
       {children}

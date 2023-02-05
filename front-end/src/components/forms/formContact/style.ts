@@ -2,21 +2,36 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-
   p,
-  h3 {
+  h2 {
     color: white;
   }
 `;
 
-export const MainDiv = styled.div`
+export const FormStyle = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  input {
+    padding: 3px;
+    font-size: 15px;
+    border-width: 1px;
+    border-color: #ededed;
+    background-color: #ffffff;
+    color: black;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: 0px 0px 11px rgba(66, 66, 66, 0.75);
+    text-shadow: -5px 0px 8px rgba(66, 66, 66, 0.75);
+  }
+  input:focus {
+    outline: none;
+  }
 
   button {
     background-color: rgba(23, 26, 32, 0.8);

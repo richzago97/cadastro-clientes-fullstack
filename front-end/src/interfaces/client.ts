@@ -15,3 +15,16 @@ export interface IContact {
   telephone: string;
   createdAt: string;
 }
+
+export interface IContactRegister {
+  name: string;
+  email: string;
+  telephone: string;
+}
+
+export interface IClientDataUpdate {
+  name?: string;
+  email?: string;
+  password?: string;
+  telephone?: string;
+}
