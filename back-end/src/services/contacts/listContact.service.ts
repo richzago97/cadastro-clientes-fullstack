@@ -1,14 +1,15 @@
 import { AppDataSource } from "../../data-source";
 import { Contact } from "../../entities/contact.entity";
 
-const listContactService = async () => {
+const listContactService = async (id: string) => {
   const contactRepository = AppDataSource.getRepository(Contact);
 
-  const contacts = contactRepository.find({
+  const contact = contactRepository.find({
+    where: { client: { id: id } },
     relations: { client: true },
   });
 
-  return contacts;
+  return contact;
 };
 
 export default listContactService;
