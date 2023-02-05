@@ -20,9 +20,12 @@ const listContactController = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const contact = await listContactService();
-
-  return res.json(contact);
+  const id = req.params.id;
+  const contact = await listContactService(id);
+  return res
+    .status(200)
+    .header({ "Content-Type": "application/json; charset=utf-8" })
+    .send(instanceToPlain(contact));
 };
 
 const deleteContactController = async (
@@ -33,7 +36,6 @@ const deleteContactController = async (
   const deletedContact: void = await deleteContactService(id);
   return res.status(204).json(deletedContact);
 };
-
 const updateContactController = async (
   req: Request,
   res: Response
