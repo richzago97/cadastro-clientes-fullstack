@@ -10,6 +10,10 @@ export const Container = styled.div`
   h3 {
     color: white;
   }
+
+  border-bottom: 2px dashed #1c6ea4;
+  width: 100%;
+  padding: 12px;
 `;
 
 export const MainDiv = styled.div`
