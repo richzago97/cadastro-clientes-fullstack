@@ -8,6 +8,9 @@ export const Container = styled.div`
   h2 {
     color: white;
   }
+  border-bottom: 2px dashed #1c6ea4;
+  width: 100%;
+  padding: 12px;
 `;
 
 export const FormStyle = styled.form`
@@ -28,6 +31,7 @@ export const FormStyle = styled.form`
     border-radius: 8px;
     box-shadow: 0px 0px 11px rgba(66, 66, 66, 0.75);
     text-shadow: -5px 0px 8px rgba(66, 66, 66, 0.75);
+    z-index: 9999;
   }
   input:focus {
     outline: none;
@@ -54,5 +58,10 @@ export const FormStyle = styled.form`
   button:hover {
     background-color: rgba(23, 26, 32, 1);
     cursor: pointer;
+  }
+
+  .error {
+    color: red;
+    margin: 0;
   }
 `;
