@@ -1,6 +1,12 @@
 import LoginClient from "../components/forms/loginClient";
+import { Header } from "../components/header";
 
 const ClientLoginPage = () => {
-  return <LoginClient />;
+  return (
+    <>
+      <Header />
+      <LoginClient />
+    </>
+  );
 };
 export default ClientLoginPage;

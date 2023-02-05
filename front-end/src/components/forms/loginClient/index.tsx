@@ -51,9 +51,9 @@ const LoginClient = () => {
           {load ? "Loading..." : "Login"}
         </button>
 
-        <h6>Ainda não possui uma conta?</h6>
-        <button type="button" onClick={() => navigate("/clients")}>
-          Cadastre-se
+        <h6>Don't have an account?</h6>
+        <button className="btnRegister" type="button" onClick={() => navigate("/clients")}>
+          Register
         </button>
       </FormLogin>
     </Container>
