@@ -38,6 +38,11 @@ export const FormStyle = styled.form`
     outline: none;
   }
 
+  p,
+  h2 {
+    color: #ffff;
+  }
+
   .btn {
     margin-top: 1rem;
     font-weight: 0;
