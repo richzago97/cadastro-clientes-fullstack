@@ -1,7 +1,13 @@
 import { FormClientRegister } from "../components/forms/formClient";
+import { Header } from "../components/header";
 
 const ClientRegistrationPage = () => {
-  return <FormClientRegister />;
+  return (
+    <>
+      <Header />
+      <FormClientRegister />
+    </>
+  );
 };
 
 export default ClientRegistrationPage;
