@@ -8,8 +8,8 @@ const ClientDashboardPage = () => {
   return (
     <Container>
       <Header />
-      <DashboardClient />
       <FormContactRegister />
+      <DashboardClient />
       <DashboardContact />
     </Container>
   );
