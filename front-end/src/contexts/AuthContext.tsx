@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { toast } from "react-hot-toast";
@@ -39,22 +39,31 @@ interface clientContextData {
   clients: IClientsList[];
   contacts: IContact[];
   client: IDataRegister;
-  setClient: React.Dispatch<any>;
-  setClientID: React.Dispatch<any>;
-  clientID: IClientID | any;
+  setClient: React.Dispatch<React.SetStateAction<string>>;
   contactRegister: (IDataContactRegister: IContactRegister) => void;
   listContacts: (
     IDataContactRegister: IContactRegister | React.MouseEvent<HTMLButtonElement>
   ) => void;
   deleteContact: (id: string) => void;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const AuthProvider = ({ children }: IClientProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const clientUser = localStorage.getItem("clientObject");
   const [client, setClient] = useState(JSON.parse(clientUser!));
   const [clients, setClients] = useState<IClientsList[]>([]);
   const [contacts, setContacts] = useState<IContact[]>([]);
-  const [clientID, setClientID] = useState<IClientID | any>();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   const clientRegister = async (data: IDataRegister) => {
     try {
@@ -62,8 +71,6 @@ const AuthProvider = ({ children }: IClientProps) => {
       if (response.status === 201) {
         navigate("/login");
         toast.success("Account successfully created!");
-        setClientID(data.id);
-        console.log(data.id, clientID);
       } else {
         toast.error("Account already registered!");
       }
@@ -77,8 +84,9 @@ const AuthProvider = ({ children }: IClientProps) => {
       .post("/login", data)
       .then((response) => {
         localStorage.setItem("@TOKEN", response.data.token);
-        setClient(response.data.token);
-        navigate("/dashboard");
+        localStorage.setItem("isAuthenticated", String(true));
+        setIsAuthenticated(true);
+        navigate("/dashboard", { replace: true });
       })
       .catch(() => {
         toast.error("Incorrect login or password");
@@ -200,8 +208,9 @@ const AuthProvider = ({ children }: IClientProps) => {
         listContacts,
         contacts,
         deleteContact,
-        setClientID,
-        clientID,
+
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}
