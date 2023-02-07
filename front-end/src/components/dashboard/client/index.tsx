@@ -10,7 +10,6 @@ export const DashboardClient = () => {
   const [showModal, setShowModal] = useState(false);
   const [isListClientsShowing, setIsListClientsShowing] = useState(false);
   const { clients, listClients, deleteClient } = useContext(AuthContext);
-  const { updateclientState } = useContext(UpdateContext);
 
   const handleEditClick = (client: IClientDataUpdate) => {
     setShowModal(true);
@@ -88,10 +87,7 @@ export const DashboardClient = () => {
               transform: "translate(-50%, -50%)",
             }}
           >
-            <ClientUpdateForm
-              client={updateclientState}
-              onClose={handleCloseModal}
-            />
+            <ClientUpdateForm onClose={handleCloseModal} />
           </div>
         </div>
       )}
