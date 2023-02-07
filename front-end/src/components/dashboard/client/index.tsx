@@ -4,7 +4,6 @@ import ClientUpdateForm from "../../../components/forms/updateClient";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import { IClientDataUpdate, IClientsList } from "../../../interfaces/client";
-import { UpdateContext } from "../../../contexts/UpdateContext";
 
 export const DashboardClient = () => {
   const [showModal, setShowModal] = useState(false);
