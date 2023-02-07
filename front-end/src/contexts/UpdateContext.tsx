@@ -1,22 +1,27 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import api from "../services/api";
+import { AuthContext } from "./AuthContext";
 
 interface IUpdateContext {
-  updateClient: (data: object, id: string) => void;
-  updateclientState: IClientUpdate;
-  setUpdateClientState: React.Dispatch<any>;
+  getClientInfo: () => void;
+  clientName: string;
+  setClientName: React.Dispatch<React.SetStateAction<string>>;
+  clientEmail: string;
+  setClientEmail: React.Dispatch<React.SetStateAction<string>>;
+  clientTelephone: string;
+  setClientTelephone: React.Dispatch<React.SetStateAction<string>>;
+  // updateClient: (data: object) => Promise<void>;
 }
 
 interface IUpdateProps {
   children: ReactNode;
 }
 
-interface IClientUpdate {
+export interface IClientUpdate {
   name: string;
   email: string;
   telephone: string;
-  id?: string;
 }
 
 export const UpdateContext = createContext<IUpdateContext>(
@@ -24,42 +29,67 @@ export const UpdateContext = createContext<IUpdateContext>(
 );
 
 const UpdateProvider = ({ children }: IUpdateProps) => {
-  const [updateclientState, setUpdateClientState] = useState<IClientUpdate>({
-    name: "",
-    email: "",
-    telephone: "",
-  });
+  const { client, setClient } = useContext(AuthContext);
 
-  const updateClient = async (data: object, id: string) => {
-    console.log("data", data);
-    console.log("Data Update Client", data);
+  const [clientName, setClientName] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [clientTelephone, setClientTelephone] = useState("");
+
+  const getClientInfo = async () => {
     try {
       const token = localStorage.getItem("@TOKEN");
-      if (token) {
-        console.log("Making API call to update client..., post if");
-        const response = await api.patch(`clients/${id}`, data, {
+      if (client) {
+        const response = await api.get(`clients/${client?.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 200) {
-          toast.success("Client updated successfully!");
-        } else {
-          console.error("Failed to update client.");
+          setClient(response.data);
+          setClientName(client.name);
+          setClientEmail(client.email);
+          setClientTelephone(client.telephone);
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Falha ao atualizar cliente.");
+      toast.error("Failure get client.");
     }
   };
+
+  // const updateClient = async (data: object) => {
+  //   console.log('Ta chamando ')
+  //   try {
+  //     const token = localStorage.getItem("@TOKEN");
+
+  //     console.log("Chamando api ");
+  //     const response = await api.patch(`clients/${client.id}`, data, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     if (response.status === 200) {
+  //       toast.success("Client updated successfully!");
+  //     } else {
+  //       console.error("Failed to update client.");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("Failure to update client.");
+  //   }
+  // };
 
   return (
     <UpdateContext.Provider
       value={{
-        updateClient,
-        updateclientState,
-        setUpdateClientState,
+        // updateClient,
+        clientName,
+        setClientName,
+        clientEmail,
+        setClientEmail,
+        clientTelephone,
+        setClientTelephone,
+        getClientInfo,
       }}
     >
       {children}

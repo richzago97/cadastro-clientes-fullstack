@@ -1,62 +1,64 @@
-import React, { useContext, useEffect } from "react";
-import { UpdateContext } from "../../../contexts/UpdateContext";
+import React, { useContext, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { IClientUpdate } from "../../../contexts/UpdateContext";
 import api from "../../../services/api";
 const UpdateClientForm: React.FC<any> = () => {
-  const { updateClient, updateclientState, setUpdateClientState } =
-    useContext(UpdateContext);
+  const { client } = useContext(AuthContext);
 
-  useEffect(() => {
-    const loadClient = async () => {
-      try {
-        const response = await api.get(`clients/${updateclientState.id}`);
-        console.log("Update useEffect, id", updateclientState.id);
-        setUpdateClientState(response.data);
-      } catch (error) {
-        console.error(error);
+  const [clientValue1, setClientValue1] = useState("");
+  const [clientValue2, setClientValue2] = useState("");
+  const [clientValue3, setClientValue3] = useState("");
+
+  const { register, handleSubmit } = useForm<IClientUpdate>({});
+
+  const onSubmitFunction = async (data: FieldValues) => {
+    try {
+      const token = localStorage.getItem("@TOKEN");
+      console.log(token);
+
+      console.log("Chamando api ", data);
+      const response = await api.patch(`clients/${client.id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        console.log("Sucess");
+      } else {
+        console.error("Failed to update client.");
       }
-    };
-    loadClient();
-  }, [setUpdateClientState, updateclientState.id]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdateClientState({
-      ...updateclientState,
-      [e.target.name]: e.target.value,
-    });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  console.log("update client state", updateclientState);
-  console.log("name", updateclientState.name);
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(updateclientState);
-    // updateClient( updateclientState);
-  };
+  console.log(clientValue1, clientValue2, clientValue3);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmitFunction)}>
       <input
         type="text"
-        name="name"
+        value={clientValue1}
         placeholder="Name"
-        value={updateclientState.name}
-        onChange={handleChange}
+        {...register("name")}
+        onChange={(event) => setClientValue1(event.target.value)}
       />
       <input
         type="email"
-        name="email"
+        value={clientValue2}
         placeholder="Email"
-        value={updateclientState.email}
-        onChange={handleChange}
+        {...register("email")}
+        onChange={(event) => setClientValue2(event.target.value)}
       />
       <input
-        type="tel"
-        name="telephone"
+        type="text"
+        value={clientValue3}
+        {...register("telephone")}
         placeholder="Phone"
-        value={updateclientState.telephone}
-        onChange={handleChange}
+        onChange={(event) => setClientValue3(event.target.value)}
       />
-      <button type="submit">Submit</button>
+      <button>Update</button>
     </form>
   );
 };
