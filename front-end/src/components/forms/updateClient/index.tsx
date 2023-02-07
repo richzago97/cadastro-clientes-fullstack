@@ -1,39 +1,35 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { IClientUpdate } from "../../../contexts/UpdateContext";
+import { toast } from "react-hot-toast";
+
+import { IClientDataUpdate } from "../../../interfaces/client";
 import api from "../../../services/api";
 const UpdateClientForm: React.FC<any> = () => {
-  const { client } = useContext(AuthContext);
-
   const [clientValue1, setClientValue1] = useState("");
   const [clientValue2, setClientValue2] = useState("");
   const [clientValue3, setClientValue3] = useState("");
 
-  const { register, handleSubmit } = useForm<IClientUpdate>({});
+  const { register, handleSubmit } = useForm<IClientDataUpdate>({});
 
   const onSubmitFunction = async (data: FieldValues) => {
     try {
       const token = localStorage.getItem("@TOKEN");
-      console.log(token);
-
-      console.log("Chamando api ", data);
-      const response = await api.patch(`clients/${client.id}`, data, {
+      const clientID = localStorage.getItem("@CLIENT_ID");
+      const response = await api.patch(`clients/${clientID}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {
-        console.log("Sucess");
+        toast.success("Client updated successfully!");
       } else {
         console.error("Failed to update client.");
+        toast.error("Email already exists!");
       }
     } catch (error) {
       console.error(error);
     }
   };
-
-  console.log(clientValue1, clientValue2, clientValue3);
 
   return (
     <form onSubmit={handleSubmit(onSubmitFunction)}>
