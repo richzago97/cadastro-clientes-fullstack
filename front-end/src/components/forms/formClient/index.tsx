@@ -18,7 +18,6 @@ export const FormClientRegister = () => {
 
   const onSubmitFunction = (data: IDataRegister) => {
     const castedData = data as IDataRegister;
-    console.log(data);
     clientRegister(castedData);
   };
 
