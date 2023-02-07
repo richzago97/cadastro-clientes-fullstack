@@ -57,7 +57,7 @@ const AuthProvider = ({ children }: IClientProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("@TOKEN");
     if (token) {
       setIsAuthenticated(true);
     } else {
@@ -68,6 +68,7 @@ const AuthProvider = ({ children }: IClientProps) => {
   const clientRegister = async (data: IDataRegister) => {
     try {
       const response = await api.post("/clients", data);
+      localStorage.setItem("@CLIENT_ID", response.data.id);
       if (response.status === 201) {
         navigate("/login");
         toast.success("Account successfully created!");
