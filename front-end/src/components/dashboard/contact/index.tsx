@@ -39,6 +39,7 @@ export const DashboardContact = () => {
               <p>Telephone: {String(contact.telephone)}</p>
               <p>E-mail: {String(contact.email)}</p>
               <p>Created at: {String(contact.createdAt)}</p>
+              <p>Updated at: {String(contact.updatedAt)}</p>
               <button onClick={() => deleteContact(contact.id)}>
                 Delete Contact
               </button>
