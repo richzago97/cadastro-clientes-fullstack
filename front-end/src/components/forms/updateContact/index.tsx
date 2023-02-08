@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import { IContactDataUpdate } from "../../../interfaces/client";
 import api from "../../../services/api";
 
-const UpdateContactForm: React.FC<any> = () => {
+const UpdateContactForm: React.FC<any> = ({ onClose }) => {
   const [contactValue1, setContactValue1] = useState("");
   const [contactValue2, setContactValue2] = useState("");
   const [contactValue3, setContactValue3] = useState("");
@@ -31,8 +31,21 @@ const UpdateContactForm: React.FC<any> = () => {
     }
   };
 
+  const closeModal = () => {
+    onClose();
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmitFunction)}>
+    <form
+      onSubmit={handleSubmit(onSubmitFunction)}
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "5px",
+      }}
+    >
       <input
         type="text"
         value={contactValue1}
@@ -57,6 +70,20 @@ const UpdateContactForm: React.FC<any> = () => {
         onChange={(event) => setContactValue3(event.target.value)}
       />
       <button>Update</button>
+      <button
+        className="x"
+        onClick={closeModal}
+        style={{
+          position: "absolute",
+          right: "-15px",
+          top: "-18px",
+          height: "15px",
+          borderRadius: "15px",
+          fontSize: "10px",
+        }}
+      >
+        X
+      </button>
     </form>
   );
 };
