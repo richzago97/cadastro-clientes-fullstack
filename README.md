@@ -83,6 +83,7 @@ yarn test ./scr/__tests__/integration/<subfolder>/<file>
 ### Run a specific test
 ````
 yarn test -t <describe or specific test wrapped in quotes>
+````
 
 #Front End
 ## Getting Started with Create React App
