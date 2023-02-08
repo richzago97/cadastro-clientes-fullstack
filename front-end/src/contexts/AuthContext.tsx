@@ -143,6 +143,8 @@ const AuthProvider = ({ children }: IClientProps) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      localStorage.setItem("@CONTACT_ID", response.data.id);
+      console.log(response.data, response.data.id);
       if (response.status === 201) {
         toast.success("Contact successfully created!");
       } else {
