@@ -14,6 +14,7 @@ export interface IContact {
   email: string;
   telephone: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface IContactRegister {
