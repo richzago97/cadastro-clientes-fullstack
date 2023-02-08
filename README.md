@@ -85,7 +85,8 @@ yarn test ./scr/__tests__/integration/<subfolder>/<file>
 yarn test -t <describe or specific test wrapped in quotes>
 ````
 
-#Front End
+# Front End
+
 ## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
