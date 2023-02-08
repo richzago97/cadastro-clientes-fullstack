@@ -125,9 +125,10 @@ const AuthProvider = ({ children }: IClientProps) => {
         });
         if (response.status === 204) {
           setClients(clients.filter((client) => client.id !== id));
-          toast.success("Client deleted with sucess!");
+          navigate("/login");
+          toast.success("Account deleted with sucess!");
         } else {
-          toast.error("Client not found");
+          toast.error("Account not found");
         }
       }
     } catch (error) {
