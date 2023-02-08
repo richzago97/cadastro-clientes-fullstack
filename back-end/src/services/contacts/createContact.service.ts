@@ -34,6 +34,7 @@ const createContactService = async (
   newContact.telephone = contactData.telephone;
   newContact.email = contactData.email;
   newContact.createdAt = new Date();
+  newContact.updatedAt = new Date();
   newContact.client = getClient;
 
   await contactRepository.save(newContact);
