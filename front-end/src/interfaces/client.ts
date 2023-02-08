@@ -28,3 +28,9 @@ export interface IClientDataUpdate {
   password?: string;
   telephone?: string;
 }
+
+export interface IContactDataUpdate {
+  name?: string;
+  email?: string;
+  telephone?: string;
+}
