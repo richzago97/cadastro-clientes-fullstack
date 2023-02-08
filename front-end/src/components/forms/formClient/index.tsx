@@ -4,8 +4,10 @@ import { AuthContext, IDataRegister } from "../../../contexts/AuthContext";
 import { useContext } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaClientRegister } from "../../../validations/validationRegister";
+import { useNavigate } from "react-router-dom";
 
 export const FormClientRegister = () => {
+  const navigate = useNavigate();
   const { clientRegister } = useContext(AuthContext);
 
   const {
@@ -48,6 +50,14 @@ export const FormClientRegister = () => {
 
         <button className="btn" type="submit">
           Register
+        </button>
+
+        <button
+          className="btnback"
+          type="button"
+          onClick={() => navigate("/login")}
+        >
+          Back
         </button>
       </FormStyle>
     </Container>
