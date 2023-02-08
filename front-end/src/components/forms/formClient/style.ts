@@ -44,7 +44,7 @@ export const FormStyle = styled.form`
   }
 
   .btn {
-    margin-top: 1rem;
+    margin-bottom: 1.5rem;
     font-weight: 0;
     font-size: 14px;
     color: #fff;
@@ -64,6 +64,32 @@ export const FormStyle = styled.form`
   .btn:hover {
     transition: 1000ms;
     padding: 10px 50px;
+    transform: translateY(-0px);
+    background-color: #fff;
+    color: #0066cc;
+    border: solid 2px #0066cc;
+  }
+
+  .btnback {
+    font-weight: bolder;
+    font-size: 14px;
+    color: #000000;
+    background-color: #fff;
+    padding: 5px 15px;
+    border: 2px solid #0066cc;
+    box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+    border-radius: 50px;
+    transition: 1000ms;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .btnback:hover {
+    transition: 1000ms;
+    padding: 10px 20px;
     transform: translateY(-0px);
     background-color: #fff;
     color: #0066cc;
