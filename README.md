@@ -1,139 +1,125 @@
-# Full Stack Challenge
+# Documentação do Projeto Full Stack - Cadastro de Clientes
 
-## Back End
+## Visão Geral
 
-1. To start this project, it is necessary to install the dependencies, which will be used in the tests. So use the command below to install such dependencies:
+Este projeto full stack é um sistema de cadastro de clientes que permite a associação de múltiplos contatos a cada cliente. Além disso, o sistema oferece a funcionalidade de geração de relatórios em tela ou em PDF, que exibem os dados do cliente e os contatos vinculados a ele. Tanto os clientes quanto os contatos possuem operações CRUD (Create, Read, Update, Delete).
 
-````
+### Tecnologias Utilizadas
+
+-  Back-End:
+
+   -  Node.js
+   -  TypeScript
+   -  Express.js
+   -  TypeORM
+   -  PostgreSQL
+
+-  Front-End:
+   -  React.js
+   -  TypeScript
+
+## Instalação
+
+Antes de iniciar o projeto, certifique-se de ter as seguintes tecnologias instaladas em seu ambiente de desenvolvimento:
+
+-  Node.js: [https://nodejs.org](https://nodejs.org)
+-  Yarn: [https://yarnpkg.com](https://yarnpkg.com)
+
+Após a instalação dessas ferramentas, siga as instruções abaixo para configurar e executar o projeto.
+
+### Configuração do Back-End
+
+1. Abra um terminal e navegue até a pasta raiz do projeto.
+
+2. Execute o seguinte comando para instalar as dependências do projeto:
+
+```bash
 yarn
-````
-**Attention:** it is necessary to use `yarn` because this project was started with this package manager.
+```
 
-To check if you already have the yarn manager installed use the following command:
+3. Crie um arquivo de ambiente `.env` com base no arquivo `.env.example` fornecido. Você pode usar o comando abaixo para isso:
 
-````
-yarn --version
-````
-
-If you don't have yarn installed, use the command below to install it globally on your machine:
-
-````
-npm install --global yarn
-````
-
-2.You must configure the .env. Use the command, causes an .env file to be created based on .env.example.
-````
+```bash
 cp .env.example .env
-````
+```
 
-3.Run the command to migrate
-````
+4. Abra o arquivo `.env` e preencha as variáveis de ambiente necessárias, como `SECRET_KEY`, `PORT`, `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB_NAME` e `POSTGRES_DB_PORT`. Certifique-se de fornecer as configurações corretas para o banco de dados PostgreSQL.
+
+5. Execute as migrações do banco de dados usando o seguinte comando:
+
+```bash
 yarn typeorm migration:run -d src/data-source.ts
-````
-4. With that done, to run your application, just use the command
-````
+```
+
+### Configuração do Front-End
+
+1. Navegue até a pasta `front` no diretório raiz do projeto:
+
+```bash
+cd front
+```
+
+2. Execute o seguinte comando para instalar as dependências do projeto:
+
+```bash
+yarn
+```
+
+## Executando o Projeto
+
+Após concluir as etapas de configuração, você estará pronto para executar o projeto. Siga as instruções abaixo para iniciar o servidor back-end e o aplicativo front-end.
+
+### Executando o Back-End
+
+1. No terminal, a partir do diretório raiz do projeto, execute o seguinte comando para iniciar o servidor back-end:
+
+```bash
 yarn dev
-````
+```
 
+2. O servidor será iniciado na porta especificada no arquivo `.env`. Verifique o console para obter informações sobre a porta em que o servidor está sendo executado.
 
-# **About the tests**
-This application has tests, which will be used to validate if all business rules were applied correctly.
+### Executando o Front-End
 
-The tests are located in `src/__tests__`.
+1. Abra outro terminal e navegue até a pasta `front` no diretório raiz do projeto.
 
-In the `integration` subfolder are the tests.
+2. Execute o seguinte comando para iniciar o aplicativo front-end:
 
-In the `mocks` subfolder are the data that will be used for the tests.
+```bash
+yarn start
+```
 
-In the `jest.config.json` file are some necessary settings for the tests to run.
+3. O aplicativo será iniciado e abrirá automaticamente no seu navegador padrão. Se isso não acontecer, você pode acessá-lo manualmente em [http://localhost:3000](http://localhost:3000).
 
-**`Do not alter any of these files in any way.`** This could compromise the integrity of the tests.
+## Uso do Sistema
 
-Also, don't change the `test` script located in `package.json`. This will be used to run the tests.
+### Autenticação de Cliente
 
-<br>
+-  Para acessar as rotas relacionadas aos clientes e contatos, é necessário autenticar como cliente. Para fazer isso, você pode usar a rota `/login` com um método `POST` e fornecer as credenciais de autenticação do cliente.
 
-# **Running the tests**
+### Rotas
 
-To run the tests it is necessary that in your terminal, you are inside the project directory.
+A seguir, estão listadas as rotas disponíveis no sistema e as operações que podem ser realizadas através delas.
 
-Once you are in the terminal and within the correct path, you can use the following commands:
-### Run all tests
-````
-yarn test
-````
-#
-### Run all tests and have an even more complete log
-````
-yarn test --all
-````
-#
+#### Rota `/login` (Cliente)
 
-### Run tests from a specific folder
-`detail: notice that tests is surrounded by 2 underscores. This is called dunder.`
-````
-yarn test ./scr/__tests__/integration/<subfolder>
-````
-#
-### Run tests from a specific file
-````
-yarn test ./scr/__tests__/integration/<subfolder>/<file>
-````
-#
-### Run a specific test
-````
-yarn test -t <describe or specific test wrapped in quotes>
-````
+-  **POST**: Realiza a autenticação do cliente. É necessário fornecer as credenciais do cliente (por exemplo, nome de usuário e senha) para obter um token de autenticação válido.
 
-# Front End
+#### Rota `/clients`
 
-## Getting Started with Create React App
+-  **POST**: Cria um novo cliente. Os dados do cliente devem ser fornecidos no corpo da solicitação.
+-  **GET**: Retorna a lista de clientes cadastrados.
+-  **GET /relatory**: Gera um relatório de clientes com seus contatos associados. O relatório pode ser exibido na tela ou baixado em formato PDF.
+-  **DELETE /:id**: Exclui um cliente com base no ID fornecido.
+-  **PATCH /:id**: Atualiza os dados de um cliente com base no ID fornecido. Os novos dados do cliente devem ser fornecidos no corpo da solicitação.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### Rota `/contacts`
 
-## Available Scripts
+-  **POST**: Cria um novo contato associado a um cliente autenticado. Os dados do contato devem ser fornecidos no corpo da solicitação.
+-  **GET**: Retorna a lista de contatos associados ao cliente autenticado.
+-  **DELETE /:id**: Exclui um contato com base no ID fornecido.
+-  **PATCH /:id**: Atualiza os dados de um contato com base no ID fornecido. Os novos dados do contato devem ser fornecidos no corpo da solicitação.
 
-First run the yarn command to install the dependencies
+## Considerações Finais
 
-### `yarn`
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Esta documentação fornece uma visão geral detalhada do projeto full stack de cadastro de clientes. Certifique-se de seguir as etapas de instalação e execução descritas anteriormente para configurar corretamente o projeto em seu ambiente de desenvolvimento.
