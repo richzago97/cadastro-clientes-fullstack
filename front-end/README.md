@@ -1,50 +1,125 @@
-# Getting Started with Create React App
+# Documentação do Projeto Full Stack - Cadastro de Clientes
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Visão Geral
 
-## Available Scripts
+Este projeto full stack é um sistema de cadastro de clientes que permite a associação de múltiplos contatos a cada cliente. Além disso, o sistema oferece a funcionalidade de geração de relatórios em tela ou em PDF, que exibem os dados do cliente e os contatos vinculados a ele. Tanto os clientes quanto os contatos possuem operações CRUD (Create, Read, Update, Delete).
 
-First run the yarn command to install the dependencies
+### Tecnologias Utilizadas
 
-### `yarn`
+-  Back-End:
 
-In the project directory, you can run:
+   -  Node.js
+   -  TypeScript
+   -  Express.js
+   -  TypeORM
+   -  PostgreSQL
 
-### `yarn start`
+-  Front-End:
+   -  React.js
+   -  TypeScript
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Instalação
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Antes de iniciar o projeto, certifique-se de ter as seguintes tecnologias instaladas em seu ambiente de desenvolvimento:
 
-### `yarn test`
+-  Node.js: [https://nodejs.org](https://nodejs.org)
+-  Yarn: [https://yarnpkg.com](https://yarnpkg.com)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Após a instalação dessas ferramentas, siga as instruções abaixo para configurar e executar o projeto.
 
-### `yarn build`
+### Configuração do Back-End
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Abra um terminal e navegue até a pasta raiz do projeto.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Execute o seguinte comando para instalar as dependências do projeto:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+yarn
+```
 
-### `yarn eject`
+3. Crie um arquivo de ambiente `.env` com base no arquivo `.env.example` fornecido. Você pode usar o comando abaixo para isso:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+cp .env.example .env
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Abra o arquivo `.env` e preencha as variáveis de ambiente necessárias, como `SECRET_KEY`, `PORT`, `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB_NAME` e `POSTGRES_DB_PORT`. Certifique-se de fornecer as configurações corretas para o banco de dados PostgreSQL.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+5. Execute as migrações do banco de dados usando o seguinte comando:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+yarn typeorm migration:run -d src/data-source.ts
+```
 
-## Learn More
+### Configuração do Front-End
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Navegue até a pasta `front` no diretório raiz do projeto:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+cd front
+```
+
+2. Execute o seguinte comando para instalar as dependências do projeto:
+
+```bash
+yarn
+```
+
+## Executando o Projeto
+
+Após concluir as etapas de configuração, você estará pronto para executar o projeto. Siga as instruções abaixo para iniciar o servidor back-end e o aplicativo front-end.
+
+### Executando o Back-End
+
+1. No terminal, a partir do diretório raiz do projeto, execute o seguinte comando para iniciar o servidor back-end:
+
+```bash
+yarn dev
+```
+
+2. O servidor será iniciado na porta especificada no arquivo `.env`. Verifique o console para obter informações sobre a porta em que o servidor está sendo executado.
+
+### Executando o Front-End
+
+1. Abra outro terminal e navegue até a pasta `front` no diretório raiz do projeto.
+
+2. Execute o seguinte comando para iniciar o aplicativo front-end:
+
+```bash
+yarn start
+```
+
+3. O aplicativo será iniciado e abrirá automaticamente no seu navegador padrão. Se isso não acontecer, você pode acessá-lo manualmente em [http://localhost:3000](http://localhost:3000).
+
+## Uso do Sistema
+
+### Autenticação de Cliente
+
+-  Para acessar as rotas relacionadas aos clientes e contatos, é necessário autenticar como cliente. Para fazer isso, você pode usar a rota `/login` com um método `POST` e fornecer as credenciais de autenticação do cliente.
+
+### Rotas
+
+A seguir, estão listadas as rotas disponíveis no sistema e as operações que podem ser realizadas através delas.
+
+#### Rota `/login` (Cliente)
+
+-  **POST**: Realiza a autenticação do cliente. É necessário fornecer as credenciais do cliente (por exemplo, nome de usuário e senha) para obter um token de autenticação válido.
+
+#### Rota `/clients`
+
+-  **POST**: Cria um novo cliente. Os dados do cliente devem ser fornecidos no corpo da solicitação.
+-  **GET**: Retorna a lista de clientes cadastrados.
+-  **GET /relatory**: Gera um relatório de clientes com seus contatos associados. O relatório pode ser exibido na tela ou baixado em formato PDF.
+-  **DELETE /:id**: Exclui um cliente com base no ID fornecido.
+-  **PATCH /:id**: Atualiza os dados de um cliente com base no ID fornecido. Os novos dados do cliente devem ser fornecidos no corpo da solicitação.
+
+#### Rota `/contacts`
+
+-  **POST**: Cria um novo contato associado a um cliente autenticado. Os dados do contato devem ser fornecidos no corpo da solicitação.
+-  **GET**: Retorna a lista de contatos associados ao cliente autenticado.
+-  **DELETE /:id**: Exclui um contato com base no ID fornecido.
+-  **PATCH /:id**: Atualiza os dados de um contato com base no ID fornecido. Os novos dados do contato devem ser fornecidos no corpo da solicitação.
+
+## Considerações Finais
+
+Esta documentação fornece uma visão geral detalhada do projeto full stack de cadastro de clientes. Certifique-se de seguir as etapas de instalação e execução descritas anteriormente para configurar corretamente o projeto em seu ambiente de desenvolvimento.
