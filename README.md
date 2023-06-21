@@ -89,7 +89,7 @@ yarn dev
 yarn start
 ```
 
-3. O aplicativo será iniciado e abrirá automaticamente no seu navegador padrão. Se isso não acontecer, você pode acessá-lo manualmente em [http://localhost:3000](http://localhost:3000).
+3. O aplicativo será iniciado e abrirá automaticamente no seu navegador padrão. Se isso não acontecer, você pode acessá-lo manualmente em [http://localhost:3005](http://localhost:3005).
 
 ## Uso do Sistema
 
